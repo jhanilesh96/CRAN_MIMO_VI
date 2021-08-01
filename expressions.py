@@ -1,5 +1,7 @@
 # sim_fast is a boolean key for faster python implementation using einsum.
 
+
+
 '''' A. Define Posterior Variables '''
 '''' A1.1 Channel Gain'''
 qB_mu = dgk*randcomp([T,G,K,M,N]) # np.ones([T,G,K,M,N], dtype='complex64')
@@ -13,6 +15,11 @@ qD = 0.2*np.ones([T,K],dtype='float')
 qSigma2_alpha = qSigma2_alpha0 * np.ones([T, G], dtype='float')
 qSigma2_beta = qSigma2_beta0 * np.ones([T, G], dtype='float')
 qH = np.zeros(qB_mu.shape, dtype='complex')
+
+'''' A2 Pre computed variables'''
+AK = np.zeros([K,N,N], dtype='complex')
+for k in range(K):
+    AK[k] = np.einsum('np,Np->nN', np.conj(X[k]), X[k])
 
 
 def post1_ChannelGain(t,g,k,m):
